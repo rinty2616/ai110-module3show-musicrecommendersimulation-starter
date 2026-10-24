@@ -1,111 +1,140 @@
 # 🎧 Model Card: Music Recommender Simulation
 
-## 1. Model Name  
+## 1. Model Name
 
-Give your model a short, descriptive name.  
-Example: **VibeFinder 1.0**  
+**VibeFinder 1.0**
 
----
+## 2. Intended Use
 
-## 2. Intended Use  
+My music recommendation system suggests songs based on a user's favorite genre, favorite mood, and preferred energy level.
 
-Describe what your recommender is designed to do and who it is for. 
+This project is designed for classroom learning. It shows how a simple recommendation algorithm works.
 
-Prompts:  
+It is not intended to replace professional music recommendation systems such as Spotify.
 
-- What kind of recommendations does it generate  
-- What assumptions does it make about the user  
-- Is this for real users or classroom exploration  
+## 3. How the Model Works
 
----
+My program reads songs from a CSV file and compares them with a user's music preferences.
 
-## 3. How the Model Works  
+It gives:
+- 2 points for a matching genre.
+- 1 point for a matching mood.
+- Up to 1 point based on energy similarity.
 
-Explain your scoring approach in simple language.  
+The highest possible score is 4 points.
 
-Prompts:  
+The program calculates a score for every song, ranks the songs from highest to lowest, and recommends the top 5.
 
-- What features of each song are used (genre, energy, mood, etc.)  
-- What user preferences are considered  
-- How does the model turn those into a score  
-- What changes did you make from the starter logic  
+I implemented the scoring and ranking functions from the starter project.
 
-Avoid code here. Pretend you are explaining the idea to a friend who does not program.
+## 4. Data
 
----
+My dataset contains 15 songs.
 
-## 4. Data  
+The original dataset included 10 songs, and I added 5 more songs to increase diversity.
 
-Describe the dataset the model uses.  
+The dataset includes pop, rock, lofi, jazz, reggae, EDM, country, R&B, classical, and other genres.
 
-Prompts:  
+Each song contains information such as genre, mood, energy, tempo, valence, danceability, and acousticness.
 
-- How many songs are in the catalog  
-- What genres or moods are represented  
-- Did you add or remove data  
-- Are there parts of musical taste missing in the dataset  
+My current scoring algorithm uses genre, mood, and energy.
 
----
+One limitation is that 15 songs are not enough to represent everyone's music preferences.
 
-## 5. Strengths  
+## 5. Strengths
 
-Where does your system seem to work well  
+My system works well when a song closely matches the user's preferences.
 
-Prompts:  
+For the High-Energy Pop profile, **Sunrise City** ranked first with 3.92 points.
 
-- User types for which it gives reasonable results  
-- Any patterns you think your scoring captures correctly  
-- Cases where the recommendations matched your intuition  
+For the Chill Lofi profile, **Library Rain** ranked first with 3.95 points.
 
----
+For the Intense Rock profile, **Storm Runner** ranked first with 3.96 points.
 
-## 6. Limitations and Bias 
+These results make sense because the top songs closely match the requested genre, mood, and energy.
 
-Where the system struggles or behaves unfairly. 
+The system also explains why it recommends each song.
 
-Prompts:  
+## 6. Limitations and Bias
 
-- Features it does not consider  
-- Genres or moods that are underrepresented  
-- Cases where the system overfits to one preference  
-- Ways the scoring might unintentionally favor some users  
+My system gives more importance to genre than mood, which may create a filter bubble.
 
----
+Some genres have only one song in the dataset, so users who enjoy those genres have fewer choices.
 
-## 7. Evaluation  
+The algorithm does not currently use listening history, likes, or skips.
 
-How you checked whether the recommender behaved as expected. 
+It also does not use all the available song features, such as danceability and acousticness.
 
-Prompts:  
+These limitations may prevent the system from recommending other songs a user could enjoy.
 
-- Which user profiles you tested  
-- What you looked for in the recommendations  
-- What surprised you  
-- Any simple tests or comparisons you ran  
+## 7. Evaluation
 
-No need for numeric metrics unless you created some.
+I tested my recommendation system with three different user profiles:
 
----
+1. High-Energy Pop
+2. Chill Lofi
+3. Intense Rock
 
-## 8. Future Work  
+I checked the top 5 songs for each profile and compared their scores.
 
-Ideas for how you would improve the model next.  
+**Comparison 1: High-Energy Pop vs. Chill Lofi**
 
-Prompts:  
+High-Energy Pop recommended Sunrise City first, while Chill Lofi recommended Library Rain. This makes sense because the users prefer different music styles and energy levels.
 
-- Additional features or preferences  
-- Better ways to explain recommendations  
-- Improving diversity among the top results  
-- Handling more complex user tastes  
+**Comparison 2: High-Energy Pop vs. Intense Rock**
 
----
+High-Energy Pop recommended Sunrise City first, while Intense Rock recommended Storm Runner. Both profiles prefer high energy, but different genres and moods produce different recommendations.
 
-## 9. Personal Reflection  
+**Comparison 3: Chill Lofi vs. Intense Rock**
 
-A few sentences about your experience.  
+Chill Lofi recommended softer, lower-energy music, while Intense Rock recommended louder, higher-energy music.
 
-Prompts:  
+**Scoring Experiment**
 
-- What you learned about recommender systems  
-- Something unexpected or interesting you discovered  
-- How this changed the way you think about music recommendation apps  
+I also tested what happened when I changed the scoring weights.
+
+Original scoring:
+- Genre: 2 points
+- Mood: 1 point
+- Energy: up to 1 point
+
+Experimental scoring:
+- Genre: 1 point
+- Mood: 1 point
+- Energy: up to 2 points
+
+For the Intense Rock profile, Storm Runner's score changed from 3.96 to 3.92, while Gym Hero increased from 1.98 to 2.96.
+
+For the Chill Lofi profile, Spacewalk Thoughts moved above Focus Flow when energy became more important.
+
+This showed me that changing the scoring weights can change the recommendations and rankings.
+
+After my experiment, I restored the original scoring rules.
+
+I also ran automated Python tests, and both tests passed.
+
+## 8. Future Work
+
+If I improve this project, I would:
+
+1. Add more songs and genres to the dataset.
+2. Include user likes, skips, and listening history.
+3. Improve the scoring system to provide more diverse recommendations.
+
+These improvements could make the recommendations more personalized.
+
+## 9. Personal Reflection
+
+During this project, I learned how a music recommendation system uses data and scoring rules to suggest songs.
+
+I learned how to load data from a CSV file, calculate scores, and rank songs using Python.
+
+AI tools helped me understand the code, build the functions, and troubleshoot errors. I checked the results by running the program and testing it myself.
+
+I also learned how to fix import errors and problems caused by using different preference names in my Python files.
+
+The most surprising part was seeing how changing a few scoring numbers could affect song recommendations.
+
+This project helped me understand how simple algorithms can create personalized experiences.
+
+In the future, I would like to add more songs and use real user feedback to improve my recommendation system.

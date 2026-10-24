@@ -17,17 +17,13 @@ Replace this paragraph with your own summary of what your version does.
 
 ## How The System Works
 
-Explain your design in plain language.
+My music recommendation system recommends songs based on the user's favorite genre, favorite mood, and preferred energy level.
 
-Some prompts to answer:
+The system gives 2 points for a genre match, 1 point for a mood match, and up to 1 point for energy similarity.
 
-- What features does each `Song` use in your system
-  - For example: genre, mood, energy, tempo
-- What information does your `UserProfile` store
-- How does your `Recommender` compute a score for each song
-- How do you choose which songs to recommend
+It calculates scores for all 15 songs and recommends the top 5 songs with the highest scores.
 
-You can include a simple diagram or bullet list if helpful.
+One limitation is that the system may favor certain genres and miss other songs the user might enjoy.
 
 ---
 
@@ -71,12 +67,22 @@ You can add more tests in `tests/test_recommender.py`.
 Paste a sample of your recommender's output here as a text block so a reader can see what it produces:
 
 ```
-# e.g.:
-# User profile: genre=indie, mood=chill, energy=low
-# Recommendations:
-#   1. ...
-#   2. ...
-#   3. ...
+Top recommendations:
+
+Sunrise City - Score: 3.98
+Because: Genre match (+2.0), Mood match (+1.0), Energy similarity (+0.98)
+
+Gym Hero - Score: 2.87
+Because: Genre match (+2.0), Energy similarity (+0.87)
+
+Rooftop Lights - Score: 1.96
+Because: Mood match (+1.0), Energy similarity (+0.96)
+
+Electric Dreams - Score: 1.85
+Because: Mood match (+1.0), Energy similarity (+0.85)
+
+Night Drive Loop - Score: 0.95
+Because: Energy similarity (+0.95)
 ```
 
 **Screenshot or video** *(optional)*: <!-- Insert a screenshot or demo video link here -->
@@ -117,6 +123,18 @@ Write 1 to 2 paragraphs here about what you learned:
 
 - about how recommenders turn data into predictions
 - about where bias or unfairness could show up in systems like this
+## Evaluation: Three Music Profiles
 
+```text
+High-Energy Pop
+
+
+
+Chill Lofi
+
+
+
+Intense Rock
+```
 
 
