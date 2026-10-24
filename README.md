@@ -2,49 +2,34 @@
 
 ## Project Summary
 
-In this project you will build and explain a small music recommender system.
-
-Your goal is to:
-
-- Represent songs and a user "taste profile" as data
-- Design a scoring rule that turns that data into recommendations
-- Evaluate what your system gets right and wrong
-- Reflect on how this mirrors real world AI recommenders
-
-Replace this paragraph with your own summary of what your version does.
-
----
+I built a simple music recommendation system in Python. It compares songs with a user's favorite genre, favorite mood, and preferred energy level. The program scores all 15 songs in a CSV file, recommends the top five, and explains why each song was selected. I tested different user profiles to see how recommendations changed and experimented with the scoring weights.
 
 ## How The System Works
 
-My music recommendation system recommends songs based on the user's favorite genre, favorite mood, and preferred energy level.
+The system uses **content-based filtering**: it compares a user's stated preferences with song features, rather than using the listening habits of other users. Each song has information including genre, mood, energy, tempo, valence, danceability, and acousticness. This version scores songs using three features:
 
-The system gives 2 points for a genre match, 1 point for a mood match, and up to 1 point for energy similarity.
+- **Genre match:** +2.0 points
+- **Mood match:** +1.0 point
+- **Energy similarity:** up to +1.0 point, calculated from how close a song's energy is to the preferred energy
 
-It calculates scores for all 15 songs and recommends the top 5 songs with the highest scores.
-
-One limitation is that the system may favor certain genres and miss other songs the user might enjoy.
-
----
+The highest possible score is 4.0. The program loads the catalog, scores each song, sorts the results from highest to lowest, and displays the top five with explanations. It may over-favor genre because genre has the largest weight.
 
 ## Getting Started
 
-### Setup
+From the project folder, create and activate a virtual environment on a Mac:
 
-1. Create a virtual environment (optional but recommended):
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
 
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate      # Mac or Linux
-   .venv\Scripts\activate         # Windows
-
-2. Install dependencies
+Install the dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Run the app:
+Run the program:
 
 ```bash
 python -m src.main
@@ -52,21 +37,17 @@ python -m src.main
 
 ### Running Tests
 
-Run the starter tests with:
-
 ```bash
-pytest
+python -m pytest -v
 ```
 
-You can add more tests in `tests/test_recommender.py`.
-
----
+When I tested the project, both automated tests passed.
 
 ## Sample Recommendation Output
 
-Paste a sample of your recommender's output here as a text block so a reader can see what it produces:
+For a user who likes pop, happy music, and energy level 0.8, my program produced:
 
-```
+```text
 Top recommendations:
 
 Sunrise City - Score: 3.98
@@ -85,56 +66,89 @@ Night Drive Loop - Score: 0.95
 Because: Energy similarity (+0.95)
 ```
 
-**Screenshot or video** *(optional)*: <!-- Insert a screenshot or demo video link here -->
+## Evaluation: Three Music Profiles
 
----
+I tested three sets of preferences and compared their top five results.
+
+### High-Energy Pop
+
+```text
+Sunrise City - Score: 3.92
+Because: Genre match (+2.0), Mood match (+1.0), Energy similarity (+0.92)
+
+Gym Hero - Score: 2.97
+Because: Genre match (+2.0), Energy similarity (+0.97)
+
+Electric Dreams - Score: 1.95
+Because: Mood match (+1.0), Energy similarity (+0.95)
+
+Rooftop Lights - Score: 1.86
+Because: Mood match (+1.0), Energy similarity (+0.86)
+
+Storm Runner - Score: 0.99
+Because: Energy similarity (+0.99)
+```
+
+### Chill Lofi
+
+```text
+Library Rain - Score: 3.95
+Because: Genre match (+2.0), Mood match (+1.0), Energy similarity (+0.95)
+
+Midnight Coding - Score: 3.88
+Because: Genre match (+2.0), Mood match (+1.0), Energy similarity (+0.88)
+
+Focus Flow - Score: 2.90
+Because: Genre match (+2.0), Energy similarity (+0.90)
+
+Spacewalk Thoughts - Score: 1.98
+Because: Mood match (+1.0), Energy similarity (+0.98)
+
+Coffee Shop Stories - Score: 0.93
+Because: Energy similarity (+0.93)
+```
+
+### Intense Rock
+
+```text
+Storm Runner - Score: 3.96
+Because: Genre match (+2.0), Mood match (+1.0), Energy similarity (+0.96)
+
+Gym Hero - Score: 1.98
+Because: Mood match (+1.0), Energy similarity (+0.98)
+
+Electric Dreams - Score: 1.00
+Because: Energy similarity (+1.00)
+
+Sunrise City - Score: 0.87
+Because: Energy similarity (+0.87)
+
+Rooftop Lights - Score: 0.81
+Because: Energy similarity (+0.81)
+```
+
+The results changed with the user preferences. High-Energy Pop ranked **Sunrise City** first, Chill Lofi ranked **Library Rain** first, and Intense Rock ranked **Storm Runner** first. High-Energy Pop and Intense Rock both prefer strong energy, but their different genres and moods led to different top recommendations. Chill Lofi favored gentler songs instead.
 
 ## Experiments You Tried
 
-Use this section to document the experiments you ran. For example:
+I changed the scoring weights to see what would happen when energy mattered more than genre:
 
-- What happened when you changed the weight on genre from 2.0 to 0.5
-- What happened when you added tempo or valence to the score
-- How did your system behave for different types of users
+| Feature | Original weight | Experimental weight |
+| --- | ---: | ---: |
+| Genre match | 2.0 | 1.0 |
+| Mood match | 1.0 | 1.0 |
+| Energy similarity | Up to 1.0 | Up to 2.0 |
 
----
+For the **Intense Rock** profile, Storm Runner changed from **3.96** to **3.92**, Gym Hero from **1.98** to **2.96**, and Electric Dreams from **1.00** to **2.00**. The top three songs stayed in the same order, but the scores changed. For **Chill Lofi**, Spacewalk Thoughts moved above Focus Flow when energy became more important. This showed that changing feature weights can change rankings. I restored the original weights after the experiment.
 
 ## Limitations and Risks
 
-Summarize some limitations of your recommender.
-
-Examples:
-
-- It only works on a tiny catalog
-- It does not understand lyrics or language
-- It might over favor one genre or mood
-
-You will go deeper on this in your model card.
-
----
+The catalog has only 15 songs, so it cannot represent every genre or listening preference. Some genres have fewer songs than others. Because genre is worth more than mood, the system may create a **filter bubble** and overlook songs from other genres that a listener might enjoy. It does not use user listening history, likes, skips, lyrics, or all the available numerical song features. A larger, more balanced catalog and more user feedback could make the recommendations better.
 
 ## Reflection
 
-Read and complete `model_card.md`:
+I learned how recommender systems turn data and preferences into scores and ranked suggestions. I practiced reading a CSV file, writing Python functions, explaining scores, and testing results. AI tools helped me understand code and troubleshoot errors, but I ran the program and checked the recommendations myself.
 
-[**Model Card**](model_card.md)
+What surprised me most was how changing a few scoring weights affected the results. I now understand better how music apps can influence what listeners discover, and why recommendation systems should consider bias and diversity. If I improved this project, I would add more songs and use feedback such as likes and skips.
 
-Write 1 to 2 paragraphs here about what you learned:
-
-- about how recommenders turn data into predictions
-- about where bias or unfairness could show up in systems like this
-## Evaluation: Three Music Profiles
-
-```text
-High-Energy Pop
-
-
-
-Chill Lofi
-
-
-
-Intense Rock
-```
-
-
+Read the full [Model Card](model_card.md) for more details about the system, its evaluation, and its limitations.
